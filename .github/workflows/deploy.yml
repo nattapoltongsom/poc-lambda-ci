@@ -3,7 +3,7 @@ name: Deploy to AWS Lambda
 on:
   push:
     branches:
-      - main # หรือ branch ที่คุณต้องการให้ deploy
+      - main
 
 jobs:
   deploy:
@@ -12,6 +12,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 1. ติดตั้ง dependencies (เพื่อให้มี esbuild สำหรับการ build)
+      - name: Install dependencies
+        run: npm install
+
+      # 2. ติดตั้ง SAM CLI บน GitHub Runner
+      - name: Setup AWS SAM
+        uses: aws-actions/setup-sam@v2
+
+      # 3. เชื่อมต่อ AWS ด้วย Secrets ที่คุณตั้งค่าไว้
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -19,11 +33,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Zip function code
-        run: zip -r function.zip . # บีบอัดไฟล์ทั้งหมดใน repo
+      # 4. Build TypeScript เป็น JavaScript (ใช้ esbuild ตาม template.yaml)
+      - name: SAM Build
+        run: sam build
 
-      - name: Deploy to Lambda
+      # 5. Deploy โดยใช้ค่าจาก samconfig.toml ที่อยู่ใน Repo
+      - name: SAM Deploy
         run: |
-          aws lambda update-function-code \
-            --function-name YOUR_LAMBDA_FUNCTION_NAME \
-            --zip-file fileb://function.zip
+          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
