@@ -6,10 +6,9 @@ Resources:
   MyTypeScriptFunction:
     Type: AWS::Serverless::Function
     Properties:
-      # ชี้ไปที่โฟลเดอร์ root ที่มี package.json
       CodeUri: ./ 
-      # ชี้ไปที่ไฟล์ index.ts ในโฟลเดอร์ src และชื่อ function คือ handler
-      Handler: src/index.handler 
+      # เปลี่ยนจาก src/index.handler เป็น index.handler
+      Handler: index.handler 
       Runtime: nodejs20.x
       Architectures:
         - x86_64
@@ -20,7 +19,6 @@ Resources:
             Path: /hello
             Method: get
 
-    # ส่วนสำคัญสำหรับ TypeScript
     Metadata:
       BuildMethod: esbuild
       BuildProperties:

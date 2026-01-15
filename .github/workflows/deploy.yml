@@ -17,15 +17,19 @@ jobs:
         with:
           node-version: '20'
 
-      # 1. ติดตั้ง dependencies (เพื่อให้มี esbuild สำหรับการ build)
+      # 1. ติดตั้ง dependencies ปกติ
       - name: Install dependencies
         run: npm install
 
-      # 2. ติดตั้ง SAM CLI บน GitHub Runner
+      # 2. บังคับติดตั้ง esbuild แบบ Global เพื่อให้ SAM CLI เรียกใช้งานได้ทันที
+      - name: Install esbuild globally
+        run: npm install -g esbuild
+
+      # 3. ติดตั้ง SAM CLI
       - name: Setup AWS SAM
         uses: aws-actions/setup-sam@v2
 
-      # 3. เชื่อมต่อ AWS ด้วย Secrets ที่คุณตั้งค่าไว้
+      # 4. เชื่อมต่อ AWS (ใช้ค่าจาก GitHub Secrets)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -33,11 +37,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 4. Build TypeScript เป็น JavaScript (ใช้ esbuild ตาม template.yaml)
+      # 5. Build (ถอด --use-container ออกเพื่อใช้ esbuild ที่ลงไว้ในขั้นตอนที่ 2)
       - name: SAM Build
-        run: sam build --use-container
+        run: sam build
 
-      # 5. Deploy โดยใช้ค่าจาก samconfig.toml ที่อยู่ใน Repo
+      # 6. Deploy (อ่านค่าจาก samconfig.toml)
       - name: SAM Deploy
         run: |
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
