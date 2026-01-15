@@ -35,7 +35,7 @@ jobs:
 
       # 4. Build TypeScript เป็น JavaScript (ใช้ esbuild ตาม template.yaml)
       - name: SAM Build
-        run: sam build
+        run: sam build --use-container
 
       # 5. Deploy โดยใช้ค่าจาก samconfig.toml ที่อยู่ใน Repo
       - name: SAM Deploy
