@@ -1,0 +1,28 @@
+{
+  "name": "poc-lambda-ci",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc --noEmit src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nattapoltongsom/poc-lambda-ci.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nattapoltongsom/poc-lambda-ci/issues"
+  },
+  "homepage": "https://github.com/nattapoltongsom/poc-lambda-ci#readme",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.159",
+    "@types/node": "^25.0.8",
+    "esbuild": "^0.27.2",
+    "typescript": "^5.9.3"
+  }
+}

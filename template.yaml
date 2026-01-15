@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM Template for TypeScript Lambda
+
+Resources:
+  MyTypeScriptFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      # ชี้ไปที่โฟลเดอร์ root ที่มี package.json
+      CodeUri: ./ 
+      # ชี้ไปที่ไฟล์ index.ts ในโฟลเดอร์ src และชื่อ function คือ handler
+      Handler: src/index.handler 
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+
+    # ส่วนสำคัญสำหรับ TypeScript
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints: 
+          - src/index.ts
