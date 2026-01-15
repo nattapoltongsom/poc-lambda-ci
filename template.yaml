@@ -1,29 +1,24 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: SAM Template for TypeScript Lambda
+Description: Clean API Get User
 
 Resources:
-  MyTypeScriptFunction:
+  UserFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./ 
-      # เปลี่ยนจาก src/index.handler เป็น index.handler
-      Handler: index.handler 
+      CodeUri: ./
+      Handler: index.handler
       Runtime: nodejs20.x
-      Architectures:
-        - x86_64
       Events:
-        ApiEvent:
+        ProxyApi:
           Type: Api
           Properties:
-            Path: /hello
-            Method: get
-
+            Path: /{proxy+}
+            Method: ANY
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
         Minify: true
         Target: "es2020"
-        Sourcemap: true
         EntryPoints: 
           - src/index.ts

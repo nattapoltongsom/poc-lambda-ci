@@ -1,11 +1,9 @@
-import { Handler } from 'aws-lambda';
+import { Hono } from 'hono';
+import { handle } from 'hono/aws-lambda';
+import userApp from './handlers/user.handler';
 
-export const handler: Handler = async (event) => {
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: "Hello from TypeScript Lambda! vs",
-            input: event,
-        }),
-    };
-};
+export const app = new Hono();
+
+app.route('/users', userApp);
+
+export const handler = handle(app);

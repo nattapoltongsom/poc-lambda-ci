@@ -1,28 +1,21 @@
 {
-  "name": "poc-lambda-ci",
+  "name": "poc-get-user",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "build": "tsc",
-    "test": "tsc --noEmit src/index.ts"
+    "dev": "tsx server.ts",
+    "build": "sam build",
+    "deploy": "sam deploy"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nattapoltongsom/poc-lambda-ci.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/nattapoltongsom/poc-lambda-ci/issues"
-  },
-  "homepage": "https://github.com/nattapoltongsom/poc-lambda-ci#readme",
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.159",
-    "@types/node": "^25.0.8",
-    "esbuild": "^0.27.2",
-    "typescript": "^5.9.3"
+    "@hono/node-server": "^1.13.7",
+    "@types/aws-lambda": "^8.10.145",
+    "@types/node": "^20.11.0",
+    "esbuild": "^0.24.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "hono": "^4.6.14"
   }
 }

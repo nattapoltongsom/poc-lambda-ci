@@ -3,45 +3,46 @@ name: Deploy to AWS Lambda
 on:
   push:
     branches:
-      - main
+      - main  # หรือเปลี่ยนเป็นชื่อ branch ที่คุณใช้งาน
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm' # ช่วยให้ลง library เร็วขึ้นในครั้งถัดไป
 
-      # 1. ติดตั้ง dependencies ปกติ
+      # 1. ติดตั้ง Library ของโปรเจกต์
       - name: Install dependencies
         run: npm install
 
-      # 2. บังคับติดตั้ง esbuild แบบ Global เพื่อให้ SAM CLI เรียกใช้งานได้ทันที
-      - name: Install esbuild globally
+      # 2. ติดตั้ง esbuild แบบ Global (สำคัญมากเพื่อให้ SAM หาเจอ)
+      - name: Install esbuild
         run: npm install -g esbuild
 
       # 3. ติดตั้ง SAM CLI
       - name: Setup AWS SAM
         uses: aws-actions/setup-sam@v2
 
-      # 4. เชื่อมต่อ AWS (ใช้ค่าจาก GitHub Secrets)
+      # 4. เชื่อมต่อ AWS ด้วย Secrets
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 5. Build (ถอด --use-container ออกเพื่อใช้ esbuild ที่ลงไว้ในขั้นตอนที่ 2)
+      # 5. Build โปรเจกต์ (SAM จะอ่าน template.yaml และใช้ esbuild)
       - name: SAM Build
         run: sam build
 
-      # 6. Deploy (อ่านค่าจาก samconfig.toml)
+      # 6. Deploy ขึ้น AWS (อ่านค่าจาก samconfig.toml ใน repo)
       - name: SAM Deploy
         run: |
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
