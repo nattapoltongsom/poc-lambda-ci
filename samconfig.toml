@@ -1,0 +1,11 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "poc-lambda-typescript"
+resolve_s3 = true
+s3_prefix = "poc-lambda-typescript"
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
+
+[default.global.parameters]
+region = "ap-southeast-1"

@@ -4,7 +4,7 @@ export const handler: Handler = async (event) => {
     return {
         statusCode: 200,
         body: JSON.stringify({
-            message: "Hello from TypeScript Lambda!",
+            message: "Hello from TypeScript Lambda! vs",
             input: event,
         }),
     };
