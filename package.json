@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "tsx server.ts",
     "build": "sam build",
+    "visual-dev": "sam local start-api",
     "deploy": "sam deploy"
   },
   "devDependencies": {
